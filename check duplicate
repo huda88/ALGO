@@ -1,0 +1,47 @@
+__author__ = 'Julia'
+
+import sys
+
+A = []
+for line in sys.stdin:
+    for word in line.strip().split():
+        A.append(int(word))
+
+b = False
+
+def merge(a):
+    l = len(a)
+    if l == 1:
+        return a
+    a1 = merge(a[:l//2])
+    a2 = merge(a[l//2:])
+    a_sort = []
+    index1, index2 = 0, 0
+    while index1 < len(a1) and index2 < len(a2):
+        if a1[index1] == a2[index2]:
+            global b
+            b = True
+            a_sort.append(a2[index2])
+            index2 += 1
+        elif a1[index1] > a2[index2]:
+            a_sort.append(a2[index2])
+            index2 += 1
+        else:
+            a_sort.append(a1[index1])
+            index1 += 1
+    if index1 < len(a1):
+        a_sort.extend(a1[index1:])
+    else:
+        a_sort.extend(a2[index2:])
+    return a_sort
+
+def check_duplicate(a):
+    global b
+    merge(a)
+    if b == True:
+        return True
+    else:
+        return False
+
+
+check_duplicate(A)
